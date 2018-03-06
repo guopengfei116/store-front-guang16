@@ -45,7 +45,7 @@
 
                 // 这里的字段要按照接口文档进行修改
                 ruleForm2: {
-                    user_name: "",
+                    user_name: "ivanyb",
                     password: ""
                 },
 

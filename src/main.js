@@ -13,6 +13,7 @@ import axios from 'axios'  // 不是vue插件, 导入之后只能在当前模块
 import api, { domain } from './js/api.js' 
 
 import './less/index.less'
+import './assets/css/style.css'
 
 Vue.use(ElementUI)
 
