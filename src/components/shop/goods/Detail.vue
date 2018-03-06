@@ -16,6 +16,8 @@
 
                     <!--页面左边-->
                     <div class="left-925">
+
+                        <!-- 放大镜与商品购买 -->
                         <div class="goods-box clearfix">
 
                             <!-- 商品放大镜 -->
@@ -99,29 +101,17 @@
                             <!--/商品信息-->
                         </div>
 
+                        <!-- 商品详情与评论 -->
                         <div id="goodsTabs" class="goods-tab bg-wrap">
-                            <!--选项卡-->
-                            <div id="tabHead" class="tab-head" style="position: static; top: 517px; width: 925px;">
-                                <ul>
-                                    <li>
-                                        <a class="selected" href="javascript:;">商品介绍</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" class="">商品评论</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--/选项卡-->
-
-                            <!--选项内容-->
-                            <div class="tab-content entry" style="display:block;">
-                                内容
-                            </div>
-
-                            <div class="tab-content" style="display: block;">
-                                <!-- 评论 - 抽取为公共组件 -->
-                            </div>
-
+                            <el-tabs type="border-card">
+                                <el-tab-pane label="商品介绍">
+                                    <div v-html="top.goodsinfo.content"></div>
+                                </el-tab-pane>
+                                <el-tab-pane label="商品评论">
+                                    <!-- 评论 - 抽取为公共组件, 需要一个id来获取默认的评论列表以及发表评论 -->
+                                    <comment :id="id"></comment>
+                                </el-tab-pane>
+                            </el-tabs>
                         </div>
 
                     </div>
@@ -142,10 +132,12 @@
     import $ from 'jquery';
 
     import AppAside from './subcom/CommonAside.vue';
+    import Comment from './subcom/CommonComment.vue';
 
     export default {
         components: {
-            AppAside
+            AppAside,
+            Comment
         },
 
         data() {
