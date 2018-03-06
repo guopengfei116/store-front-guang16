@@ -61,15 +61,18 @@
         </div>
 
         <!-- 页面主体 - 商品列表预览, 抽取为子组件 -->
+        <list-main></list-main>
     </div>
 </template>
 
 <script>
     import AppAside from './subcom/CommonAside.vue';
+    import ListMain from './subcom/ListMain.vue';
 
     export default {
         components: {
-            AppAside
+            AppAside,
+            ListMain
         },
 
         data() {
