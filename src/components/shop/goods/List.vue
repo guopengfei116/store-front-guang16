@@ -45,27 +45,17 @@
                     <!--幻灯片-->
                     <div class="left-705">
                         <div class="banner-img">
-                            <div id="focus-box" class="focus-box">
-                                <ul class="slides">
-                                    <li class="" style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 0; display: block; z-index: 1;">
-                                        <a href="/goods.html">
-                                            <img src="/templates/main/images/focus_1.png" draggable="false">
-                                        </a>
-                                    </li>
-                                    <li style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 1; display: block; z-index: 2;" class="flex-active-slide">
-                                        <a href="/goods.html">
-                                            <img src="/templates/main/images/focus_2.png" draggable="false">
-                                        </a>
-                                    </li>
-                                </ul>
-                            <ol class="flex-control-nav flex-control-paging"><li><a class="">1</a></li><li><a class="flex-active">2</a></li></ol></div>
-                            
+                            <el-carousel style="height: 100%">
+                                <el-carousel-item v-for="item in top.sliderlist" :key="item.id">
+                                    <img :src="item.img_url" :alt="item.title">
+                                </el-carousel-item>
+                            </el-carousel>
                         </div>
                     </div>
                     <!--/幻灯片-->
                     
                     <!-- 侧边栏 - 推荐商品列表, 抽取为公共组件 -->
-                    
+                    <app-aside :list="top.toplist"></app-aside>
                 </div>
             </div>
         </div>
@@ -75,7 +65,13 @@
 </template>
 
 <script>
+    import AppAside from './subcom/CommonAside.vue';
+
     export default {
+        components: {
+            AppAside
+        },
+
         data() {
             return {
                 top: {
