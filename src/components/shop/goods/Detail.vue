@@ -170,19 +170,7 @@
 
         // 视图挂载到页面上了, 这里可操作DOM
         mounted() {
-            var magnifierConfig = {
-                magnifier : "#magnifier1",//最外层的大容器
-                width : 370,//承载容器宽
-                height : 370,//承载容器高
-                moveWidth : null,//如果设置了移动盒子的宽度，则不计算缩放比例
-                zoom : 5//缩放比例
-            };
-
-            // 调用这个插件的方法, 必须保证放大镜相关的DOM节点都已经正常构建并渲染, 
-            // 但是我们的节点里面有个v-for动态生成列表, 调用该方法时不能保证列表已经构建完毕, 所以延时一下
-            setTimeout(function() {
-                var _magnifier = $().imgzoon(magnifierConfig);
-            }, 500);
+            
             
         },
 
@@ -194,6 +182,23 @@
             $route() {
                 this.id = this.$route.params.id;
                 this.getTop();
+            },
+
+            // 监听放大镜图片数据的变化, 变化后重新调用插件初始化方法
+            top() {
+                var magnifierConfig = {
+                    magnifier : "#magnifier1",//最外层的大容器
+                    width : 370,//承载容器宽
+                    height : 370,//承载容器高
+                    moveWidth : null,//如果设置了移动盒子的宽度，则不计算缩放比例
+                    zoom : 5//缩放比例
+                };
+
+                // 调用这个插件的方法, 必须保证放大镜相关的DOM节点都已经正常构建并渲染, 
+                // 但是我们的节点里面有个v-for动态生成列表, 调用该方法时不能保证列表已经构建完毕, 所以延时一下
+                setTimeout(function() {
+                    var _magnifier = $().imgzoon(magnifierConfig);
+                }, 100);
             }
         }
     };
