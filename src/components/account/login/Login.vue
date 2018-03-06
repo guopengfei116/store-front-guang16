@@ -5,13 +5,13 @@
             <el-form :model="ruleForm2" :rules="rules2" label-position="top" status-icon ref="abc" label-width="100px" class="demo-ruleForm">
 
                 <!-- label用来设置表单提示文字, prop用来指定当前表单代表的字段名(可省略, 但是如果需要表单校验与重置功能, 必须写) -->
-                <el-form-item label="账号" prop="uname">
+                <el-form-item label="账号" prop="user_name">
                     <!-- v-model双向数据绑定, 需要绑定data里的数据, 将来要把这些数据提交给后端 -->
-                    <el-input type="text" v-model="ruleForm2.uname" auto-complete="off"></el-input>
+                    <el-input type="text" v-model="ruleForm2.user_name" auto-complete="off"></el-input>
                 </el-form-item>
 
-                <el-form-item label="密码" prop="upwd">
-                    <el-input type="password" v-model="ruleForm2.upwd" auto-complete="off"></el-input>
+                <el-form-item label="密码" prop="password">
+                    <el-input type="password" v-model="ruleForm2.password" auto-complete="off"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -45,14 +45,14 @@
 
                 // 这里的字段要按照接口文档进行修改
                 ruleForm2: {
-                    uname: "",
-                    upwd: ""
+                    user_name: "",
+                    password: ""
                 },
 
                 // 这里添加的校验规则, 每个字段可以加多个, 所以是个数组
                 rules2: {
-                    uname: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-                    upwd: [{ required: true, message: "请输入密码", trigger: "blur" }]
+                    user_name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+                    password: [{ required: true, message: "请输入密码", trigger: "blur" }]
                 }
             };
         },
@@ -67,11 +67,11 @@
                         this.$alert('登陆成功', '提示', {
                             callback: () => {
                                 // 保存用户姓名
-                                localStorage.setItem('uname', res.data.message.uname);
+                                localStorage.setItem('user_name', res.data.message.user_name);
 
                                 // 使用了路由插件之后, 组件实例就拥有了该对象, 对象有一个push方法, 可以进行路由跳转
                                 
-                                let nextPage = this.$route.query.next || '/admin';
+                                let nextPage = this.$route.query.next || '/goods/list';
                                 // 登陆成功后, 跳转到用户未登陆前要访问的页面
                                 this.$router.push({ path: nextPage });
                             }
