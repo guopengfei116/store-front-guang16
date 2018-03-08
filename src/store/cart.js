@@ -6,7 +6,15 @@ export default {
     state: {
         // 这里的初始数据优先从storage里获取, 如果没有就设一个空对象
         // 数据结构预览: { 153: 5, 154: 10, 155: 12 }, ID为key, 数量为value
-        cart: JSON.parse(localStorage.getItem('cart')) || {} 
+        cart: JSON.parse(localStorage.getItem('cart')) || {},
+    },
+
+    // 相当于computed数据
+    getters: {
+        total(state) {
+            // values先拿到对象里的val数量, 然后reduce把他们合并相加
+            return Object.values(state.cart).reduce((sum, v) => sum += v, 0);
+        }
     },
 
     // 定义修改状态的方法, 这里的方法需要通过store.commit(方法名称, 参数)

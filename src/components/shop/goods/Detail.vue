@@ -164,7 +164,8 @@
 
             // 加入购物车
             addCart() {
-                this.$store.commit('modify', { id: this.id, num: this.num });
+                let newNum = this.num + (this.$store.state.cart[this.id] || 0); // 当前数量加上以前的数量
+                this.$store.commit('modify', { id: this.id, num: newNum  });
                 this.num = 0;  // 加完之后重置计数框
             }
         },
