@@ -94,9 +94,9 @@
                                 <tr>
                                     <th align="right" colspan="8">
                                         已选择商品
-                                        <b class="red" id="totalQuantity">5</b> 件 &nbsp;&nbsp;&nbsp;
+                                        <b class="red" id="totalQuantity">{{ total }}</b> 件 &nbsp;&nbsp;&nbsp;
                                         商品总金额（不含运费）：
-                                        <span class="red">￥</span><b class="red" id="totalAmount">9999</b>元
+                                        <span class="red">￥</span><b class="red" id="totalAmount">{{ totalPrice }}</b>元
                                     </th>
                                 </tr>
                             </tbody>
@@ -131,6 +131,23 @@
             // 如果所有商品的selected为true, 那么这个属性值就为true, 有一个false, 那么就为false
             allSelected() {
                 return this.goodsList.every(v => v.selected);
+            },
+
+            // 被选商品总数 => 遍历所有商品, 如果selecred为true, 那么累加该商品的购买数量
+            total() {
+                let sum = 0;
+                this.goodsList.forEach(v => v.selected && (sum += this.$store.state.cart[v.id]));
+                return sum;
+            },
+
+            // 被选商品总价
+            totalPrice() {
+                let sum = 0;
+                this.goodsList.forEach(v => v.selected && (sum += this.$store.state.cart[v.id] * v.sell_price));
+                return sum;
+
+                // let arr = [1, 2, 3, 4, 5, 6, 7, 8]
+                // arr.reduce((sum, v) => sum + v, 0)
             }
         },
 
