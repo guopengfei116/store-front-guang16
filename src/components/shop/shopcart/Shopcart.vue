@@ -41,9 +41,12 @@
                         <input id="jsondata" name="jsondata" type="hidden">
                         <table width="100%" align="center" class="cart-table" border="0" cellspacing="0" cellpadding="8">
                             <tbody>
+
+                                <!-- 表头 -->
                                 <tr>
                                     <th width="48" align="center">
-                                        <el-switch active-color="#13ce66"></el-switch>
+                                        <!-- value属性的值是由其他商品的selected值共同决定的 -->
+                                        <el-switch :value="allSelected" @change="allChange" active-color="#13ce66"></el-switch>
                                     </th>
                                     <th align="left" colspan="2">商品信息</th>
                                     <th width="84" align="left">单价</th>
@@ -52,6 +55,7 @@
                                     <th width="54" align="center">操作</th>
                                 </tr>
 
+                                <!-- 表体 -->
                                 <tr v-for="item in goodsList" :key="item.id">
                                     <th width="48" align="center">
                                         <el-switch v-model="item.selected" active-color="#13ce66"></el-switch>
@@ -121,6 +125,15 @@
             }
         },
 
+        computed: {
+
+            // 定义一个控制全选按钮的属性, 这个属性的值与goodsList里的每一个商品selected值相关
+            // 如果所有商品的selected为true, 那么这个属性值就为true, 有一个false, 那么就为false
+            allSelected() {
+                return this.goodsList.every(v => v.selected);
+            }
+        },
+
         methods: {
             // 先拿到全局状态中所有id拼成的ids, 然后调接口
             getGoodsList() {
@@ -133,6 +146,11 @@
                         this.goodsList = res.data.message;
                     }
                 })
+            },
+
+            // 监听全选按钮的点击事件, 得到新的状态值, 然后遍历所有商品依次设为新的状态
+            allChange(newStatus) {
+                this.goodsList.forEach(v => v.selected = newStatus);
             }
         },
 
