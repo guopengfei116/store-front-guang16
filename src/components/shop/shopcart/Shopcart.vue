@@ -74,7 +74,7 @@
                                         <td>￥{{ item.sell_price * $store.state.cart[item.id] }}</td>
                                     </th>
                                     <th width="54" align="center">
-                                        <el-button size="mini">删除</el-button>
+                                        <el-button @click="del(item.id)" size="mini">删除</el-button>
                                     </th>
                                 </tr>
 
@@ -146,6 +146,7 @@
                 this.goodsList.forEach(v => v.selected && (sum += this.$store.state.cart[v.id] * v.sell_price));
                 return sum;
 
+                // reduce方法可以把数组中的多个值合并为1个值
                 // let arr = [1, 2, 3, 4, 5, 6, 7, 8]
                 // arr.reduce((sum, v) => sum + v, 0)
             }
@@ -168,6 +169,12 @@
             // 监听全选按钮的点击事件, 得到新的状态值, 然后遍历所有商品依次设为新的状态
             allChange(newStatus) {
                 this.goodsList.forEach(v => v.selected = newStatus);
+            },
+
+            // 删除 => 先从goodsList里面删除, 再从全局cart状态里删除
+            del(id) {
+                this.goodsList = this.goodsList.filter(v => v.id != id); // 找出不删除的商品
+                this.$store.commit('del', id);                           // 调用mutaions方法删除
             }
         },
 
