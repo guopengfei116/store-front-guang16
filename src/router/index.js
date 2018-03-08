@@ -25,7 +25,7 @@ let shopcart = [
 ];
 
 let order = [ 
-  { name: 'orderSite', path: 'order/site', component: OrderSite }, // 需要知道哪些商品要下单
+  { name: 'orderSite', path: 'order/site/:ids', component: OrderSite }, // 需要知道哪些商品要下单
   { name: 'orderPay', path: 'order/pay/:id', component: OrderPay }, // 需要知道订单ID才能付款
   { name: 'orderComplete', path: 'order/complete', component: OrderComplete }
 ];
