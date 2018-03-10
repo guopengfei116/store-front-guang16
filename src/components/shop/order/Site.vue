@@ -177,16 +177,16 @@
                                 <div class="right-box">
                                     <p>
                                         商品
-                                        <label class="price">78</label> 件&nbsp;&nbsp;&nbsp;&nbsp; 商品金额：￥
-                                        <label id="goodsAmount" class="price">900</label> 元&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label class="price">{{ total }}</label> 件&nbsp;&nbsp;&nbsp;&nbsp; 商品金额：￥
+                                        <label id="goodsAmount" class="price">{{ totalPrice }}</label> 元&nbsp;&nbsp;&nbsp;&nbsp;
                                     </p>
                                     <p>
                                         运费：￥
-                                        <label id="expressFee" class="price">200</label> 元
+                                        <label id="expressFee" class="price">{{ expressPrice }}</label> 元
                                     </p>
                                     <p class="txt-box">
                                         应付总金额：￥
-                                        <label id="totalAmount" class="price">1100</label>
+                                        <label id="totalAmount" class="price">{{ orderPrice }}</label>
                                     </p>
                                     <p class="btn-box">
                                         <button class="btn button">返回购物车</button>
@@ -208,7 +208,33 @@
             return {
                 ids: this.$route.params.ids,
                 goodsList: [],
-                form: {}
+                form: {
+                    express_id: '1', // 默认选中顺丰
+                    payment_id: '6' // 默认选中在线支付
+                },
+                expressPriceTable: { 1: 20, 2: 10, 3: 8, 4: 8 } // 快递ID与价格映射表
+            }
+        },
+
+        computed: {
+            // 总数 => 遍历商品列表，累加他们的数量
+            total() {
+                return this.goodsList.reduce((sum, v) => sum += this.$store.state.cart[v.id], 0);
+            },
+
+            // 总价 => 遍历商品列表，累加他们的数量 * 单价
+            totalPrice() {
+                return this.goodsList.reduce((sum, v) => sum += this.$store.state.cart[v.id] * v.sell_price, 0);
+            },
+
+            // 快递费 => 判断用户所选的快递ID(form.express_id)，根据ID返回不同的价格
+            expressPrice() {
+                return this.expressPriceTable[this.form.express_id];
+            },
+
+            // 完整总价
+            orderPrice() {
+                return this.totalPrice + this.expressPrice;
             }
         },
 
