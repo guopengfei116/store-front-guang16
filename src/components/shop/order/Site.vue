@@ -54,7 +54,7 @@
                                 <dl class="form-group">
                                     <dt>所属地区：</dt>
                                     <dd>
-                                        省市区三级联动
+                                        <v-distpicker @selected="pickerChange"></v-distpicker>
                                     </dd>
                                 </dl>
                                 <dl class="form-group">
@@ -203,7 +203,13 @@
 </template>
 
 <script>
+    import VDistpicker from 'v-distpicker'
+
     export default {
+        components: { 
+            VDistpicker 
+        },
+
         data() {
             return {
                 ids: this.$route.params.ids,
@@ -250,12 +256,35 @@
             },
 
             // 下订单按钮, 成功后跳转到付款页面
+            // 接口需要几个特殊字段，在数据提交前需要手动添加上：
+            // goodsAmount  商品总价，有计算属性可以直接拿到
+            // expressMoment  快递费，有计算属性可以直接拿到
+            // goodsids 下单商品ids，url传递过来了，直接拿
+            // cargoodsobj 下单商品id与数量映射对象，需要自己通过ids生成
             submit() {
+
+                this.form.goodsAmount = this.orderPrice;
+                this.form.expressMoment = this.expressPrice;
+                this.form.goodsids = this.ids; // '10, 12, 21'
+
+                this.form.cargoodsobj = 
+                    this.ids.split(',')  // [10, 12, 21]
+                    .reduce((o, v) => { 
+                        o[v] = this.$store.state.cart[v];
+                        return o; 
+                    }, {}); // { 10: 2, 12: 1, 21: 5 }
+
                 this.$http.post(this.$api.orderSubmit, this.form).then(res => {
                     if(res.data.status == 0) {
-                        this.$router.push({name: 'orderPay', params: {id: 1}});
+                        this.$router.push({name: 'orderPay', params: {id: res.data.message.orderid}});
                     }
                 })
+            },
+
+            // 省市区联动数据
+            pickerChange(val) {
+                this.form.area = val;
+                console.log(val)
             }
         },
 
