@@ -13,6 +13,9 @@ import OrderSite from '../components/shop/order/Site';
 import OrderPay from '../components/shop/order/Pay';
 import OrderComplete from '../components/shop/order/Complete';
 
+// 导入支付页面
+import Pay from '../components/shop/Pay/Pay';
+
 Vue.use(Router)
 
 let goods = [
@@ -32,6 +35,9 @@ let order = [
 
 let router = new Router({
   routes: [
+
+    // 支付页面
+    { name: 'pay', path: '/pay/:id', component: Pay },
 
     // 账户管理路由配置
     { name: 'login', path: '/login', component: Login },

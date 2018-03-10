@@ -262,11 +262,12 @@
             // goodsids 下单商品ids，url传递过来了，直接拿
             // cargoodsobj 下单商品id与数量映射对象，需要自己通过ids生成
             submit() {
-
+                
                 this.form.goodsAmount = this.orderPrice;
                 this.form.expressMoment = this.expressPrice;
                 this.form.goodsids = this.ids; // '10, 12, 21'
 
+                // 把ids字符串劈成数组, 然后遍历数组, 拿到id与数量, 构成对象返回
                 this.form.cargoodsobj = 
                     this.ids.split(',')  // [10, 12, 21]
                     .reduce((o, v) => { 
@@ -274,6 +275,7 @@
                         return o; 
                     }, {}); // { 10: 2, 12: 1, 21: 5 }
 
+                // 调接口下单
                 this.$http.post(this.$api.orderSubmit, this.form).then(res => {
                     if(res.data.status == 0) {
                         this.$router.push({name: 'orderPay', params: {id: res.data.message.orderid}});

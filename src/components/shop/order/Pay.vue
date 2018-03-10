@@ -22,13 +22,13 @@
                                     <div class="el-col el-col-12">
                                         <dl class="form-group">
                                             <dt>订 单 号：</dt>
-                                            <dd>xxxxxxxxdsad</dd>
+                                            <dd>{{ order.order_no }}</dd>
                                         </dl>
                                     </div>
                                     <div class="el-col el-col-12">
                                         <dl class="form-group">
                                             <dt>收货人姓名：</dt>
-                                            <dd>李四</dd>
+                                            <dd>{{ order.accept_name }}</dd>
                                         </dl>
                                     </div>
                                 </div>
@@ -36,13 +36,13 @@
                                     <div class="el-col el-col-12">
                                         <dl class="form-group">
                                             <dt>送货地址：</dt>
-                                            <dd>张家口</dd>
+                                            <dd>{{ order.area }}</dd>
                                         </dl>
                                     </div>
                                     <div class="el-col el-col-12">
                                         <dl class="form-group">
                                             <dt>手机号码：</dt>
-                                            <dd>1343232342</dd>
+                                            <dd>{{ order.mobile }}</dd>
                                         </dl>
                                     </div>
                                 </div>
@@ -50,7 +50,7 @@
                                     <div class="el-col el-col-12">
                                         <dl class="form-group">
                                             <dt>支付金额：</dt>
-                                            <dd>6543元</dd>
+                                            <dd>{{ order.order_amount }}元</dd>
                                         </dl>
                                     </div>
                                     <div class="el-col el-col-12">
@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="message">
                                     <span>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</span>
-                                    <span>司法诉讼烦都烦死</span>
+                                    <span>{{ order.message }}</span>
                                 </div>
                             </div>
                             <div class="el-col el-col-8">
@@ -81,7 +81,62 @@
 </template>
 
 <script>
+    import '@/lib/qr/jqueryqr.js';
+    import $ from 'jquery';
+
     export default {
+        data() {
+            return {
+                id: this.$route.params.id,
+                order: {},
+                timer: null
+            }
+        },
+
+        methods: {
+            // 获取订单信息
+            getOrder() {
+                this.$http.get(this.$api.order + this.id).then(res => {
+                    if(res.data.status == 0) {
+                        this.order = res.data.message[0]; // 注意接口返回的是一个数组
+                    }
+                })
+            },
+
+            // 开启定时器不断检测当前订单的状态, 如果为2, 证明支付成功过了, 那么跳转到支付成功页面
+            checkStatus() {
+                this.timer = setInterval(() => {
+                    console.log(1111)
+                    this.$http.get(this.$api.order + this.id).then(res => {
+
+                        // 成功后清除定时器, 然后跳到到成功页面
+                        if(res.data.message[0].status == 2) {
+                            clearInterval(this.timer);
+                            this.$router.push({name: 'orderComplete'});
+                        }
+                    })
+                }, 2000);
+            }
+        },
+
+        created() {
+            this.getOrder();
+            this.checkStatus();
+        },
+
+        mounted() {
+            // 二维码插件使用
+            $('#container').erweima({
+                text: `http://localhost:8080/pay/${this.id}`,
+                label: '买买买'
+            });
+        },
+
+        // 组件销毁时会自动被调用, 在这个生命周期函数里一般会主动销毁各种不能自动释放的资源
+        destroyed() {
+            clearInterval(this.timer);
+        }
+
     }
 </script>
 
